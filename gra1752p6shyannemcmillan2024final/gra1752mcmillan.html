@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<!-- Created with Ai->Canvas Export Plug-In Version 1.8 (PC/64) -->
+<!-- By Mike Swanson (http://blog.mikeswanson.com/)             -->
+
+<html lang="en">
+ <head>
+  <meta charset="UTF-8" />
+  <title>gra1752mcmillan</title>
+  <script src="Ai2CanvasAnimation.js"></script>
+  <script>
+
+    // Main canvas and context references
+    var canvas;
+    var ctx;
+
+    // Frames per second
+    var fps = 60.0;
+
+    // Animations
+    var animations = [ new wavePath(), new treelPath(), new treerPath(), new cloudslPath(), new cloudsrPath() ];
+
+    function wavePath() {
+
+      // Control and anchor points
+      this.points = [
+                    [ [683.5, 594.3], [684.1, 608.6], [684.7, 622.8], [685.3, 637.4] ]
+                    ];
+
+      // Linear motion index
+      this.linear = [
+                    [0, 0.00, 0.00], [0, 1.00, 1.00]
+                    ];
+
+      // Segment T boundaries
+      this.segmentT = [1.00];
+
+      this.lastValue = -1.0;
+      this.x = 0;
+      this.y = 0;
+      this.orientation = 0.0;
+      this.pathClock = new clock(4.00, 0.00, 1, true, 0, linear, this.linear.length - 1, 1.00, 0.0000);
+
+      // Update function
+      this.update = updatePath;
+    }
+
+    function treelPath() {
+
+      // Control and anchor points
+      this.points = [
+                    [ [1262.0, 291.9], [1264.7, 298.3], [1267.3, 304.6], [1270.0, 311.2] ]
+                    ];
+
+      // Linear motion index
+      this.linear = [
+                    [0, 0.00, 0.00], [0, 1.00, 1.00]
+                    ];
+
+      // Segment T boundaries
+      this.segmentT = [1.00];
+
+      this.lastValue = -1.0;
+      this.x = 0;
+      this.y = 0;
+      this.orientation = 0.0;
+      this.pathClock = new clock(10.00, 0.00, 1, true, 0, linear, this.linear.length - 1, 1.00, 0.0000);
+
+      // Update function
+      this.update = updatePath;
+    }
+
+    function treerPath() {
+
+      // Control and anchor points
+      this.points = [
+                    [ [136.3, 278.6], [133.2, 290.6], [130.1, 302.6], [127.0, 314.9] ]
+                    ];
+
+      // Linear motion index
+      this.linear = [
+                    [0, 0.00, 0.00], [0, 1.00, 1.00]
+                    ];
+
+      // Segment T boundaries
+      this.segmentT = [1.00];
+
+      this.lastValue = -1.0;
+      this.x = 0;
+      this.y = 0;
+      this.orientation = 0.0;
+      this.pathClock = new clock(10.00, 0.00, 1, true, 0, linear, this.linear.length - 1, 1.00, 0.0000);
+
+      // Update function
+      this.update = updatePath;
+    }
+
+    function cloudslPath() {
+
+      // Control and anchor points
+      this.points = [
+                    [ [1144.2, 135.8], [720.5, 135.8], [296.8, 135.8], [-139.7, 135.8] ]
+                    ];
+
+      // Linear motion index
+      this.linear = [
+                    [0, 0.00, 0.00], [0, 0.04, 0.04], [0, 0.08, 0.08], [0, 0.12, 0.12], 
+                    [0, 0.16, 0.16], [0, 0.20, 0.20], [0, 0.24, 0.24], [0, 0.28, 0.28], 
+                    [0, 0.32, 0.32], [0, 0.36, 0.36], [0, 0.40, 0.40], [0, 0.44, 0.44], 
+                    [0, 0.48, 0.48], [0, 0.52, 0.52], [0, 0.56, 0.56], [0, 0.60, 0.60], 
+                    [0, 0.64, 0.64], [0, 0.68, 0.68], [0, 0.72, 0.72], [0, 0.76, 0.76], 
+                    [0, 0.80, 0.80], [0, 0.84, 0.84], [0, 0.88, 0.88], [0, 0.92, 0.92], 
+                    [0, 0.96, 0.96], [0, 1.00, 1.00]
+                    ];
+
+      // Segment T boundaries
+      this.segmentT = [1.00];
+
+      this.lastValue = -1.0;
+      this.x = 0;
+      this.y = 0;
+      this.orientation = 0.0;
+      this.pathClock = new clock(60.00, 0.00, 1, true, 0, linear, this.linear.length - 1, 1.00, 0.0000);
+
+      // Update function
+      this.update = updatePath;
+    }
+
+    function cloudsrPath() {
+
+      // Control and anchor points
+      this.points = [
+                    [ [289.6, 22.4], [699.4, 22.4], [1109.2, 22.4], [1531.4, 22.4] ]
+                    ];
+
+      // Linear motion index
+      this.linear = [
+                    [0, 0.00, 0.00], [0, 0.04, 0.04], [0, 0.08, 0.08], [0, 0.13, 0.12], 
+                    [0, 0.17, 0.17], [0, 0.21, 0.21], [0, 0.25, 0.25], [0, 0.29, 0.29], 
+                    [0, 0.34, 0.33], [0, 0.38, 0.38], [0, 0.42, 0.42], [0, 0.46, 0.46], 
+                    [0, 0.50, 0.50], [0, 0.55, 0.54], [0, 0.59, 0.58], [0, 0.63, 0.62], 
+                    [0, 0.67, 0.67], [0, 0.71, 0.71], [0, 0.75, 0.75], [0, 0.79, 0.79], 
+                    [0, 0.84, 0.83], [0, 0.88, 0.88], [0, 0.92, 0.92], [0, 0.96, 0.96], 
+                    [0, 1.00, 1.00]
+                    ];
+
+      // Segment T boundaries
+      this.segmentT = [1.00];
+
+      this.lastValue = -1.0;
+      this.x = 0;
+      this.y = 0;
+      this.orientation = 0.0;
+      this.pathClock = new clock(60.00, 0.00, 1, true, 0, linear, this.linear.length - 1, 1.00, 0.0000);
+
+      // Update function
+      this.update = updatePath;
+    }
+
+    function init() {
+
+      // Set main canvas and context references
+      canvas = document.getElementById("canvas");
+      ctx = canvas.getContext("2d");
+
+      // Initialize animations
+      sunrays.rotateClock = new clock(45.00, 0.00, -1, false, 0, linear, 2.0 * Math.PI, 1.00, 0.0000);
+      sunrays.alphaClock = new clock(6.00, 1.70, 1, false, 1, linear, 1.0, 1.00, 0.0000);
+
+      // Start animation clocks
+      sunrays.rotateClock.start();
+      sunrays.alphaClock.start();
+      animations[0].pathClock.start();
+      animations[1].pathClock.start();
+      animations[2].pathClock.start();
+      animations[3].pathClock.start();
+      animations[4].pathClock.start();
+
+      // Set animation timer
+      setInterval(drawFrame, (1000 / fps));
+    }
+
+    function updateAnimations() {
+
+      // Update animation clocks
+      updateAllClocks();
+
+      // Update animation paths  
+      var animationCount = animations.length;
+      for (var i = 0; i < animationCount; i++) {
+        animations[i].update();
+      }
+    }
+
+    function drawFrame() {
+
+      // Update animations
+      updateAnimations();
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      background(ctx);
+
+      sunmoon(ctx);
+
+      ctx.save();
+      ctx.translate(688.3, 485.5);
+      ctx.rotate(sunrays.rotateClock.value);
+      ctx.globalAlpha = sunrays.alphaClock.value;
+      sunrays(ctx);
+      ctx.restore();
+
+      sand(ctx);
+
+      ocean(ctx);
+
+      ctx.save();
+      ctx.translate(animations[0].x, animations[0].y);
+      wave(ctx);
+      ctx.restore();
+
+      treetrunks(ctx);
+
+      ctx.save();
+      ctx.translate(animations[1].x, animations[1].y);
+      treel(ctx);
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(animations[3].x, animations[3].y);
+      cloudsl(ctx);
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(animations[4].x, animations[4].y);
+      cloudsr(ctx);
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(animations[2].x, animations[2].y);
+      treer(ctx);
+      ctx.restore();
+    }
+
+    function background(ctx) {
+
+      // background/Rectangle
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(1366.0, 772.2);
+      ctx.lineTo(0.0, 772.2);
+      ctx.lineTo(0.0, 0.0);
+      ctx.lineTo(1366.0, 0.0);
+      ctx.lineTo(1366.0, 772.2);
+      ctx.closePath();
+      ctx.fillStyle = "rgb(255, 255, 255)";
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function sunmoon(ctx) {
+
+      // sunmoon
+      ctx.drawImage(document.getElementById("image1"), 0.0, -257.0);
+    }
+
+    function sunrays(ctx) {
+
+      var alpha = ctx.globalAlpha;
+      var gradient;
+
+      // sunrays/Group
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.68;
+
+      // sunrays/Group/Path
+      ctx.save();
+      ctx.globalAlpha = alpha * 1.00;
+      ctx.beginPath();
+      ctx.moveTo(118.4, -102.2);
+      ctx.lineTo(101.3, -119.2);
+      ctx.lineTo(383.2, -428.1);
+      ctx.lineTo(426.0, -385.3);
+      ctx.lineTo(118.4, -102.2);
+      ctx.closePath();
+      ctx.save();
+      ctx.transform(1.000, 0.000, 0.000, -1.022, -688.3, -736.4);
+      gradient = ctx.createRadialGradient(697.1, -471.2, 0.0, 952.0, -471.2, 254.9);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.restore();
+      ctx.beginPath();
+      ctx.moveTo(156.0, 11.5);
+      ctx.lineTo(156.0, -12.7);
+      ctx.lineTo(573.7, -31.8);
+      ctx.lineTo(573.7, 28.8);
+      ctx.lineTo(156.0, 11.5);
+      ctx.closePath();
+      gradient = ctx.createRadialGradient(106.5, -0.2, 0.0, 364.8, -1.5, 258.3);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.beginPath();
+      ctx.moveTo(102.2, 118.4);
+      ctx.lineTo(119.2, 101.3);
+      ctx.lineTo(428.1, 383.2);
+      ctx.lineTo(385.3, 426.0);
+      ctx.lineTo(102.2, 118.4);
+      ctx.closePath();
+      gradient = ctx.createRadialGradient(20.2, 266.5, 0.0, 265.2, 263.7, 244.9);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.beginPath();
+      ctx.moveTo(-11.5, 156.0);
+      ctx.lineTo(12.7, 156.0);
+      ctx.lineTo(31.8, 573.7);
+      ctx.lineTo(-28.8, 573.7);
+      ctx.lineTo(-11.5, 156.0);
+      ctx.closePath();
+      gradient = ctx.createRadialGradient(-222.7, 363.8, 0.0, 1.5, 364.8, 224.2);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.beginPath();
+      ctx.moveTo(-118.4, 102.2);
+      ctx.lineTo(-101.3, 119.2);
+      ctx.lineTo(-383.2, 428.1);
+      ctx.lineTo(-426.0, 385.3);
+      ctx.lineTo(-118.4, 102.2);
+      ctx.closePath();
+      gradient = ctx.createRadialGradient(-108.1, 108.0, 0.0, -263.7, 265.2, 221.1);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.beginPath();
+      ctx.moveTo(-156.0, -11.5);
+      ctx.lineTo(-156.0, 12.7);
+      ctx.lineTo(-573.7, 31.8);
+      ctx.lineTo(-573.7, -28.8);
+      ctx.lineTo(-156.0, -11.5);
+      ctx.closePath();
+      gradient = ctx.createRadialGradient(-573.4, 2.1, 0.0, -364.8, 1.5, 239.7);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.beginPath();
+      ctx.moveTo(-102.2, -118.4);
+      ctx.lineTo(-119.2, -101.3);
+      ctx.lineTo(-428.1, -383.2);
+      ctx.lineTo(-385.3, -426.0);
+      ctx.lineTo(-102.2, -118.4);
+      ctx.closePath();
+      ctx.save();
+      ctx.transform(1.000, 0.000, 0.000, -1.001, -688.3, -736.4);
+      gradient = ctx.createRadialGradient(174.6, -476.0, 0.0, 423.2, -472.7, 248.6);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // sunrays/Group/Path
+      ctx.restore();
+      ctx.beginPath();
+      ctx.moveTo(11.5, -156.0);
+      ctx.lineTo(-12.7, -156.0);
+      ctx.lineTo(-31.8, -573.7);
+      ctx.lineTo(28.8, -573.7);
+      ctx.lineTo(11.5, -156.0);
+      ctx.closePath();
+      gradient = ctx.createRadialGradient(-226.7, -361.1, 0.0, -1.5, -364.8, 225.2);
+      gradient.addColorStop(0.03, "rgb(247, 203, 33)");
+      gradient.addColorStop(0.24, "rgb(238, 180, 18)");
+      gradient.addColorStop(0.49, "rgb(228, 157, 2)");
+      gradient.addColorStop(0.87, "rgb(249, 125, 78)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+      ctx.restore();
+    }
+
+    function sand(ctx) {
+
+      var gradient;
+
+      // sand
+      ctx.drawImage(document.getElementById("image2"), -41.0, 465.1);
+    }
+
+    function ocean(ctx) {
+
+      var gradient;
+
+      // ocean/Path
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(-4.6, 501.7);
+      ctx.lineTo(1366.0, 501.7);
+      ctx.lineTo(1366.0, 686.9);
+      ctx.lineTo(-4.6, 686.9);
+      ctx.lineTo(-4.6, 501.7);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(680.7, 686.9, 680.7, 501.7);
+      gradient.addColorStop(0.01, "rgba(0, 147, 141, 0.00)");
+      gradient.addColorStop(0.17, "rgba(0, 147, 141, 0.50)");
+      gradient.addColorStop(0.33, "rgb(0, 147, 141)");
+      gradient.addColorStop(0.41, "rgb(0, 130, 144)");
+      gradient.addColorStop(0.64, "rgb(0, 112, 147)");
+      gradient.addColorStop(0.95, "rgb(103, 112, 147)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function wave(ctx) {
+
+      var gradient;
+
+      // wave/Blend
+      ctx.save();
+
+      // wave/Blend/Path
+      ctx.beginPath();
+      ctx.moveTo(-686.3, 49.4);
+      ctx.bezierCurveTo(-649.6, 61.0, -622.6, 84.4, -576.1, 84.4);
+      ctx.bezierCurveTo(-529.7, 84.4, -477.7, 57.3, -440.6, 57.3);
+      ctx.bezierCurveTo(-403.5, 57.3, -377.5, 84.4, -329.2, 84.4);
+      ctx.bezierCurveTo(-280.9, 84.4, -210.0, 63.6, -190.0, 66.9);
+      ctx.bezierCurveTo(-169.9, 70.2, -112.0, 84.4, -84.1, 84.4);
+      ctx.bezierCurveTo(-56.3, 84.4, -1.0, 57.3, 27.3, 57.3);
+      ctx.bezierCurveTo(64.4, 57.3, 90.4, 84.4, 112.7, 84.4);
+      ctx.bezierCurveTo(134.9, 84.4, 218.5, 57.3, 244.5, 57.3);
+      ctx.bezierCurveTo(270.5, 57.3, 307.6, 84.4, 341.9, 81.2);
+      ctx.bezierCurveTo(363.2, 79.2, 427.5, 62.8, 451.1, 64.8);
+      ctx.bezierCurveTo(474.7, 66.9, 515.5, 84.4, 532.2, 84.4);
+      ctx.bezierCurveTo(549.0, 84.4, 601.3, 75.1, 619.7, 71.0);
+      ctx.bezierCurveTo(638.1, 66.9, 662.8, 79.9, 684.3, 84.4);
+      gradient = ctx.createLinearGradient(-1.0, 49.4, -1.0, 84.4);
+      gradient.addColorStop(0.55, "rgba(0, 147, 141, 0.00)");
+      gradient.addColorStop(0.78, "rgba(0, 130, 144, 0.50)");
+      gradient.addColorStop(1.00, "rgb(0, 112, 147)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.lineWidth = 6.0;
+      ctx.strokeStyle = "rgb(12, 90, 84)";
+      ctx.stroke();
+
+      // wave/Blend/Path
+      ctx.beginPath();
+      ctx.moveTo(-685.6, 4.7);
+      ctx.bezierCurveTo(-648.8, 16.4, -621.8, 39.8, -575.4, 39.8);
+      ctx.bezierCurveTo(-529.0, 39.8, -477.0, 12.7, -439.8, 12.7);
+      ctx.bezierCurveTo(-402.7, 12.7, -376.7, 39.8, -328.4, 39.8);
+      ctx.bezierCurveTo(-280.2, 39.8, -209.2, 18.9, -189.2, 22.2);
+      ctx.bezierCurveTo(-169.2, 25.6, -111.2, 39.8, -83.4, 39.8);
+      ctx.bezierCurveTo(-55.5, 39.8, -0.2, 12.7, 28.0, 12.7);
+      ctx.bezierCurveTo(65.2, 12.7, 91.1, 39.8, 113.4, 39.8);
+      ctx.bezierCurveTo(135.7, 39.8, 219.3, 12.7, 245.2, 12.7);
+      ctx.bezierCurveTo(271.2, 12.7, 308.4, 39.8, 342.7, 36.6);
+      ctx.bezierCurveTo(363.9, 34.6, 428.3, 18.2, 451.9, 20.2);
+      ctx.bezierCurveTo(475.5, 22.2, 516.3, 39.8, 533.0, 39.8);
+      ctx.bezierCurveTo(549.7, 39.8, 602.1, 30.5, 620.5, 26.4);
+      ctx.bezierCurveTo(638.8, 22.2, 663.5, 35.3, 685.1, 39.8);
+      gradient = ctx.createLinearGradient(-0.2, 4.7, -0.2, 39.8);
+      gradient.addColorStop(0.55, "rgba(0, 147, 141, 0.00)");
+      gradient.addColorStop(0.78, "rgba(0, 130, 144, 0.50)");
+      gradient.addColorStop(1.00, "rgb(0, 112, 147)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.stroke();
+
+      // wave/Blend/Path
+      ctx.beginPath();
+      ctx.moveTo(-684.8, -39.9);
+      ctx.bezierCurveTo(-648.1, -28.2, -621.0, -4.9, -574.6, -4.9);
+      ctx.bezierCurveTo(-528.2, -4.9, -476.2, -31.9, -439.1, -31.9);
+      ctx.bezierCurveTo(-401.9, -31.9, -375.9, -4.9, -327.7, -4.9);
+      ctx.bezierCurveTo(-279.4, -4.9, -208.5, -25.7, -188.4, -22.4);
+      ctx.bezierCurveTo(-168.4, -19.1, -110.4, -4.9, -82.6, -4.9);
+      ctx.bezierCurveTo(-54.8, -4.9, 0.5, -31.9, 28.8, -31.9);
+      ctx.bezierCurveTo(65.9, -31.9, 91.9, -4.9, 114.2, -4.9);
+      ctx.bezierCurveTo(136.5, -4.9, 220.0, -31.9, 246.0, -31.9);
+      ctx.bezierCurveTo(272.0, -31.9, 309.1, -4.9, 343.4, -8.1);
+      ctx.bezierCurveTo(364.7, -10.0, 429.1, -26.4, 452.7, -24.4);
+      ctx.bezierCurveTo(476.2, -22.4, 517.1, -4.9, 533.8, -4.9);
+      ctx.bezierCurveTo(550.5, -4.9, 602.9, -14.1, 621.2, -18.3);
+      ctx.bezierCurveTo(639.6, -22.4, 664.3, -9.3, 685.9, -4.9);
+      gradient = ctx.createLinearGradient(0.5, -39.9, 0.5, -4.9);
+      gradient.addColorStop(0.55, "rgba(0, 147, 141, 0.00)");
+      gradient.addColorStop(0.78, "rgba(0, 130, 144, 0.50)");
+      gradient.addColorStop(1.00, "rgb(0, 112, 147)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.stroke();
+
+      // wave/Blend/Path
+      ctx.beginPath();
+      ctx.moveTo(-684.0, -84.5);
+      ctx.bezierCurveTo(-647.3, -72.9, -620.2, -49.5, -573.8, -49.5);
+      ctx.bezierCurveTo(-527.4, -49.5, -475.4, -76.6, -438.3, -76.6);
+      ctx.bezierCurveTo(-401.2, -76.6, -375.2, -49.5, -326.9, -49.5);
+      ctx.bezierCurveTo(-278.6, -49.5, -207.7, -70.3, -187.7, -67.0);
+      ctx.bezierCurveTo(-167.6, -63.7, -109.7, -49.5, -81.8, -49.5);
+      ctx.bezierCurveTo(-54.0, -49.5, 1.3, -76.6, 29.6, -76.6);
+      ctx.bezierCurveTo(66.7, -76.6, 92.7, -49.5, 115.0, -49.5);
+      ctx.bezierCurveTo(137.2, -49.5, 220.8, -76.6, 246.8, -76.6);
+      ctx.bezierCurveTo(272.8, -76.6, 309.9, -49.5, 344.2, -52.7);
+      ctx.bezierCurveTo(365.5, -54.7, 429.9, -71.1, 453.4, -69.1);
+      ctx.bezierCurveTo(477.0, -67.0, 517.9, -49.5, 534.6, -49.5);
+      ctx.bezierCurveTo(551.3, -49.5, 603.6, -58.8, 622.0, -62.9);
+      ctx.bezierCurveTo(640.4, -67.0, 665.1, -54.0, 686.6, -49.5);
+      gradient = ctx.createLinearGradient(1.3, -84.5, 1.3, -49.5);
+      gradient.addColorStop(0.55, "rgba(0, 147, 141, 0.00)");
+      gradient.addColorStop(0.78, "rgba(0, 130, 144, 0.50)");
+      gradient.addColorStop(1.00, "rgb(0, 112, 147)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function treetrunks(ctx) {
+
+      var gradient;
+
+      // treetrunks/Path
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(110.8, 751.7);
+      ctx.bezierCurveTo(103.6, 606.5, 108.1, 454.9, 147.5, 345.4);
+      ctx.bezierCurveTo(153.6, 328.6, 146.3, 309.8, 130.4, 301.5);
+      ctx.lineTo(130.4, 301.5);
+      ctx.bezierCurveTo(83.7, 301.5, 73.5, 494.1, 61.1, 746.9);
+      ctx.bezierCurveTo(60.4, 760.7, 71.4, 772.2, 85.1, 772.2);
+      ctx.lineTo(91.3, 772.2);
+      ctx.bezierCurveTo(102.4, 772.2, 111.3, 762.8, 110.8, 751.7);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(137.0, 540.5, 70.3, 532.3);
+      gradient.addColorStop(0.00, "rgb(101, 50, 0)");
+      gradient.addColorStop(0.19, "rgb(137, 85, 24)");
+      gradient.addColorStop(0.50, "rgb(173, 119, 49)");
+      gradient.addColorStop(0.80, "rgb(137, 85, 24)");
+      gradient.addColorStop(1.00, "rgb(101, 50, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // treetrunks/Path
+      ctx.beginPath();
+      ctx.moveTo(1300.9, 751.7);
+      ctx.bezierCurveTo(1308.1, 606.5, 1303.6, 454.9, 1264.1, 345.4);
+      ctx.bezierCurveTo(1258.1, 328.6, 1265.4, 309.8, 1281.3, 301.5);
+      ctx.lineTo(1281.3, 301.5);
+      ctx.bezierCurveTo(1328.0, 301.5, 1338.1, 494.1, 1350.6, 746.9);
+      ctx.bezierCurveTo(1351.2, 760.7, 1340.3, 772.2, 1326.5, 772.2);
+      ctx.lineTo(1320.4, 772.2);
+      ctx.bezierCurveTo(1309.2, 772.2, 1300.4, 762.8, 1300.9, 751.7);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(1274.7, 540.5, 1341.4, 532.3);
+      gradient.addColorStop(0.00, "rgb(101, 50, 0)");
+      gradient.addColorStop(0.19, "rgb(137, 85, 24)");
+      gradient.addColorStop(0.50, "rgb(173, 119, 49)");
+      gradient.addColorStop(0.80, "rgb(137, 85, 24)");
+      gradient.addColorStop(1.00, "rgb(101, 50, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function treel(ctx) {
+
+      var gradient;
+
+      // treel/Path
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(-21.6, -17.6);
+      ctx.bezierCurveTo(-21.6, -17.6, -7.8, -142.6, 113.2, -136.2);
+      ctx.bezierCurveTo(113.2, -136.2, 13.9, -72.0, 35.7, -31.9);
+      ctx.bezierCurveTo(35.7, -31.9, 145.0, -81.7, 197.7, -65.1);
+      ctx.bezierCurveTo(197.7, -65.1, 97.1, -26.4, 65.4, 19.9);
+      ctx.bezierCurveTo(65.4, 19.9, 166.9, 2.3, 201.8, 41.4);
+      ctx.bezierCurveTo(201.8, 41.4, 114.0, 27.3, 48.3, 109.1);
+      ctx.bezierCurveTo(37.7, 122.3, 17.4, 122.6, 1.6, 117.0);
+      ctx.bezierCurveTo(-34.9, 104.1, -95.8, 92.5, -138.2, 136.4);
+      ctx.bezierCurveTo(-138.2, 136.4, -101.0, 40.9, -35.6, 50.6);
+      ctx.bezierCurveTo(-35.6, 50.6, -104.5, -0.7, -201.8, 28.5);
+      ctx.bezierCurveTo(-201.8, 28.5, -107.3, -23.7, -21.6, -17.6);
+      ctx.closePath();
+      ctx.save();
+      ctx.transform(-0.999, 0.039, -0.039, -0.999, 808.4, -518.8);
+      gradient = ctx.createLinearGradient(627.9, -486.3, 1030.8, -486.3);
+      gradient.addColorStop(0.00, "rgb(0, 119, 49)");
+      gradient.addColorStop(0.28, "rgb(47, 111, 40)");
+      gradient.addColorStop(0.48, "rgb(94, 103, 30)");
+      gradient.addColorStop(0.75, "rgb(174, 144, 15)");
+      gradient.addColorStop(1.00, "rgb(255, 184, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+      ctx.restore();
+    }
+
+    function cloudsl(ctx) {
+
+      var alpha = ctx.globalAlpha;
+      var gradient;
+
+      // cloudsl/Path
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.64;
+      ctx.beginPath();
+      ctx.moveTo(-80.1, 84.4);
+      ctx.bezierCurveTo(-80.1, 96.5, -103.6, 106.3, -132.6, 106.3);
+      ctx.bezierCurveTo(-138.4, 106.3, -143.9, 105.9, -149.1, 105.2);
+      ctx.bezierCurveTo(-156.6, 108.8, -167.5, 111.1, -179.6, 111.1);
+      ctx.bezierCurveTo(-197.6, 111.1, -212.8, 106.1, -218.1, 99.3);
+      ctx.bezierCurveTo(-228.5, 103.6, -243.7, 106.3, -260.6, 106.3);
+      ctx.bezierCurveTo(-292.1, 106.3, -317.7, 96.9, -317.7, 85.2);
+      ctx.bezierCurveTo(-317.7, 73.6, -292.1, 64.1, -260.6, 64.1);
+      ctx.lineTo(-260.5, 64.1);
+      ctx.bezierCurveTo(-260.6, 63.6, -260.6, 63.1, -260.6, 62.5);
+      ctx.bezierCurveTo(-260.6, 48.1, -233.4, 36.4, -199.9, 36.4);
+      ctx.bezierCurveTo(-166.3, 36.4, -139.1, 48.1, -139.1, 62.5);
+      ctx.bezierCurveTo(-139.1, 62.6, -139.1, 62.6, -139.2, 62.7);
+      ctx.bezierCurveTo(-137.0, 62.6, -134.8, 62.5, -132.6, 62.5);
+      ctx.bezierCurveTo(-103.6, 62.5, -80.1, 72.3, -80.1, 84.4);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(-198.9, 111.1, -198.9, 36.4);
+      gradient.addColorStop(0.04, "rgb(252, 188, 52)");
+      gradient.addColorStop(0.33, "rgb(226, 216, 153)");
+      gradient.addColorStop(0.87, "rgb(200, 244, 255)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // cloudsl/Path
+      ctx.beginPath();
+      ctx.moveTo(317.7, -36.9);
+      ctx.bezierCurveTo(317.7, -18.2, 286.4, -3.1, 247.8, -3.1);
+      ctx.bezierCurveTo(240.1, -3.1, 232.7, -3.7, 225.8, -4.8);
+      ctx.bezierCurveTo(215.9, 0.8, 201.4, 4.3, 185.2, 4.3);
+      ctx.bezierCurveTo(161.3, 4.3, 141.1, -3.3, 134.0, -14.0);
+      ctx.bezierCurveTo(120.1, -7.3, 99.9, -3.1, 77.4, -3.1);
+      ctx.bezierCurveTo(35.5, -3.1, 1.5, -17.7, 1.5, -35.6);
+      ctx.bezierCurveTo(1.5, -53.6, 35.5, -68.2, 77.4, -68.2);
+      ctx.lineTo(77.5, -68.2);
+      ctx.bezierCurveTo(77.4, -69.0, 77.4, -69.8, 77.4, -70.7);
+      ctx.bezierCurveTo(77.4, -93.0, 113.6, -111.1, 158.2, -111.1);
+      ctx.bezierCurveTo(202.9, -111.1, 239.1, -93.0, 239.1, -70.7);
+      ctx.bezierCurveTo(239.1, -70.6, 239.1, -70.5, 239.1, -70.4);
+      ctx.bezierCurveTo(241.9, -70.6, 244.8, -70.7, 247.8, -70.7);
+      ctx.bezierCurveTo(286.4, -70.7, 317.7, -55.5, 317.7, -36.9);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(159.6, 4.3, 159.6, -111.1);
+      gradient.addColorStop(0.04, "rgb(252, 188, 52)");
+      gradient.addColorStop(0.15, "rgb(226, 216, 153)");
+      gradient.addColorStop(0.87, "rgb(200, 244, 255)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function cloudsr(ctx) {
+
+      var alpha = ctx.globalAlpha;
+      var gradient;
+
+      // cloudsr/Path
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.51;
+      ctx.beginPath();
+      ctx.moveTo(458.3, -91.3);
+      ctx.bezierCurveTo(458.3, -72.9, 424.1, -58.0, 381.8, -58.0);
+      ctx.bezierCurveTo(373.4, -58.0, 365.3, -58.6, 357.8, -59.7);
+      ctx.bezierCurveTo(347.0, -54.2, 331.1, -50.7, 313.4, -50.7);
+      ctx.bezierCurveTo(287.3, -50.7, 265.1, -58.2, 257.4, -68.7);
+      ctx.bezierCurveTo(242.2, -62.1, 220.1, -58.0, 195.5, -58.0);
+      ctx.bezierCurveTo(149.6, -58.0, 112.5, -72.4, 112.5, -90.1);
+      ctx.bezierCurveTo(112.5, -107.8, 149.6, -122.2, 195.5, -122.2);
+      ctx.lineTo(195.6, -122.2);
+      ctx.bezierCurveTo(195.5, -123.0, 195.5, -123.8, 195.5, -124.6);
+      ctx.bezierCurveTo(195.5, -146.7, 235.1, -164.5, 283.9, -164.5);
+      ctx.bezierCurveTo(332.7, -164.5, 372.3, -146.7, 372.3, -124.6);
+      ctx.bezierCurveTo(372.3, -124.6, 372.3, -124.5, 372.3, -124.4);
+      ctx.bezierCurveTo(375.4, -124.6, 378.6, -124.6, 381.8, -124.6);
+      ctx.bezierCurveTo(424.1, -124.6, 458.3, -109.7, 458.3, -91.3);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(285.4, -50.7, 285.4, -164.5);
+      gradient.addColorStop(0.04, "rgb(252, 188, 52)");
+      gradient.addColorStop(0.15, "rgb(226, 216, 153)");
+      gradient.addColorStop(0.87, "rgb(200, 244, 255)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // cloudsr/Path
+      ctx.globalAlpha = alpha * 0.44;
+      ctx.beginPath();
+      ctx.moveTo(-283.4, 143.9);
+      ctx.bezierCurveTo(-283.4, 153.2, -300.7, 160.8, -322.1, 160.8);
+      ctx.bezierCurveTo(-326.3, 160.8, -330.4, 160.5, -334.2, 159.9);
+      ctx.bezierCurveTo(-339.7, 162.7, -347.7, 164.5, -356.7, 164.5);
+      ctx.bezierCurveTo(-369.9, 164.5, -381.1, 160.7, -385.0, 155.4);
+      ctx.bezierCurveTo(-392.7, 158.7, -403.9, 160.8, -416.3, 160.8);
+      ctx.bezierCurveTo(-439.5, 160.8, -458.3, 153.5, -458.3, 144.5);
+      ctx.bezierCurveTo(-458.3, 135.5, -439.5, 128.3, -416.3, 128.3);
+      ctx.lineTo(-416.2, 128.3);
+      ctx.bezierCurveTo(-416.3, 127.8, -416.3, 127.4, -416.3, 127.0);
+      ctx.bezierCurveTo(-416.3, 115.8, -396.3, 106.8, -371.6, 106.8);
+      ctx.bezierCurveTo(-346.9, 106.8, -326.9, 115.8, -326.9, 127.0);
+      ctx.bezierCurveTo(-326.9, 127.0, -326.9, 127.1, -326.9, 127.1);
+      ctx.bezierCurveTo(-325.3, 127.0, -323.7, 127.0, -322.1, 127.0);
+      ctx.bezierCurveTo(-300.7, 127.0, -283.4, 134.6, -283.4, 143.9);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(-370.8, 164.5, -370.8, 106.8);
+      gradient.addColorStop(0.04, "rgb(252, 188, 52)");
+      gradient.addColorStop(0.15, "rgb(226, 216, 153)");
+      gradient.addColorStop(0.87, "rgb(200, 244, 255)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // cloudsr/Path
+      ctx.globalAlpha = alpha * 0.64;
+      ctx.beginPath();
+      ctx.moveTo(42.4, 21.0);
+      ctx.bezierCurveTo(42.4, 39.7, 11.1, 54.8, -27.5, 54.8);
+      ctx.bezierCurveTo(-35.2, 54.8, -42.6, 54.2, -49.5, 53.1);
+      ctx.bezierCurveTo(-59.4, 58.7, -73.9, 62.2, -90.1, 62.2);
+      ctx.bezierCurveTo(-114.0, 62.2, -134.2, 54.6, -141.3, 44.0);
+      ctx.bezierCurveTo(-155.2, 50.6, -175.4, 54.8, -197.9, 54.8);
+      ctx.bezierCurveTo(-239.8, 54.8, -273.8, 40.3, -273.8, 22.3);
+      ctx.bezierCurveTo(-273.8, 4.3, -239.8, -10.3, -197.9, -10.3);
+      ctx.lineTo(-197.7, -10.3);
+      ctx.bezierCurveTo(-197.8, -11.1, -197.9, -11.9, -197.9, -12.8);
+      ctx.bezierCurveTo(-197.9, -35.1, -161.7, -53.2, -117.0, -53.2);
+      ctx.bezierCurveTo(-72.4, -53.2, -36.2, -35.1, -36.2, -12.8);
+      ctx.bezierCurveTo(-36.2, -12.7, -36.2, -12.6, -36.2, -12.5);
+      ctx.bezierCurveTo(-33.4, -12.7, -30.5, -12.8, -27.5, -12.8);
+      ctx.bezierCurveTo(11.1, -12.8, 42.4, 2.4, 42.4, 21.0);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(-115.7, 62.2, -115.7, -53.2);
+      gradient.addColorStop(0.04, "rgb(252, 188, 52)");
+      gradient.addColorStop(0.28, "rgb(226, 216, 153)");
+      gradient.addColorStop(0.87, "rgb(200, 244, 255)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function treer(ctx) {
+
+      var gradient;
+
+      // treer/Path
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(19.5, -17.7);
+      ctx.bezierCurveTo(19.5, -17.7, 0.9, -142.1, -119.8, -131.0);
+      ctx.bezierCurveTo(-119.8, -131.0, -18.0, -70.7, -38.2, -29.8);
+      ctx.bezierCurveTo(-38.2, -29.8, -149.5, -75.2, -201.4, -56.7);
+      ctx.bezierCurveTo(-201.4, -56.7, -99.5, -21.9, -65.9, 23.2);
+      ctx.bezierCurveTo(-65.9, 23.2, -168.0, 9.5, -201.4, 49.9);
+      ctx.bezierCurveTo(-201.4, 49.9, -114.2, 32.4, -45.3, 111.7);
+      ctx.bezierCurveTo(-34.3, 124.4, -14.0, 123.9, 1.6, 117.7);
+      ctx.bezierCurveTo(37.6, 103.3, 97.9, 89.5, 142.0, 131.7);
+      ctx.bezierCurveTo(142.0, 131.7, 101.2, 37.7, 36.2, 49.9);
+      ctx.bezierCurveTo(36.2, 49.9, 103.0, -4.0, 201.4, 21.3);
+      ctx.bezierCurveTo(201.4, 21.3, 104.9, -27.2, 19.5, -17.7);
+      ctx.closePath();
+      gradient = ctx.createLinearGradient(-201.4, 0.0, 201.4, 0.0);
+      gradient.addColorStop(0.00, "rgb(0, 119, 49)");
+      gradient.addColorStop(0.28, "rgb(47, 111, 40)");
+      gradient.addColorStop(0.48, "rgb(94, 103, 30)");
+      gradient.addColorStop(0.75, "rgb(174, 144, 15)");
+      gradient.addColorStop(1.00, "rgb(255, 184, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+    }
+  </script>
+ </head>
+ <body onload="init()">
+   <canvas id="canvas" width="1366" height="773"></canvas>
+   <img alt="sunmoon" id="image1" style="display: none" src="sunmoon.png" />
+   <img alt="sand" id="image2" style="display: none" src="sand.png" />
+ </body>
+</html>
